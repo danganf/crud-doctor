@@ -17,7 +17,7 @@ class CreateTblDoctor extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
             $table->string('name',80)->comment('Nome do médico');
-            $table->string('crm',10)->comment('CRM do médico');
+            $table->string('crm',30)->comment('CRM do médico');
             $table->string('phone',11)->comment('Telefone do médico');
             $table->timestamps();
         });

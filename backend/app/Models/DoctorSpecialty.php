@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\app\Models\Doctor;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,4 +20,14 @@ use Illuminate\Database\Eloquent\Model;
 class DoctorSpecialty extends Model
 {
     protected $table = 'doctor_specialty';
+
+    public function doctor()
+	{
+		return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
+    }
+    
+    public function specialty()
+	{
+		return $this->hasOne(Specialty::class, 'specialty_id');
+	}
 }

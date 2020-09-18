@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use DanganfTools\MyClass\Json\Contracts\JsonAbstract;
 use DanganfTools\Repositories\Contracts\RepositoryAbstract;
+use Illuminate\Support\Facades\DB;
 
 class DoctorRepository extends RepositoryAbstract
 {
@@ -28,19 +29,38 @@ class DoctorRepository extends RepositoryAbstract
                 return false;
             }        
         }
+
+        $return = [];
         
         $this->set('name', $json->get('name'));
         $this->set('crm', $json->get('crm'));
         $this->set('phone', $json->get('phone'));
 
-        try{
-            $this->save();              
-            return $this->toArray();
-        } catch ( \Exception $e ){
-            $this->setMsgError( $e->getMessage() );
+        $items = [];
+
+        //PEGANDO TOTAL DE ESPECIALIDADES ENVIADAS QUE EXISTEM NO BANCO
+        $totalSpecialty = count( $this->getModel()->specialtys()->getRelated()
+                                    ->whereIn('id', $json->get('specialtys') )
+                                    ->select('id')->get()->toArray() );
+
+        if( count($json->get('specialtys')) == $totalSpecialty ){
+
+            DB::beginTransaction();
+            try{
+                $this->save();
+                $this->getModel()->specialtys()->sync($json->get('specialtys'));   
+                $return = $this->toArray();
+            } catch ( \Exception $e ){
+                DB::rollback();
+                $this->setMsgError( $e->getMessage() );
+            }
+            DB::commit();
+
+        } else {
+            $this->setMsgError(\Lang::get('default.specialty_not_found'));
         }
 
-        return false;
+        return !$this->getMsgError() ? $return : false;
 
     }
 }

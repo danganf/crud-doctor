@@ -6,7 +6,7 @@ use DanganfTools\MyClass\Json\Contracts\JsonAbstract;
 use DanganfTools\MyClass\Json\Contracts\JsonInterface;
 use DanganfTools\MyClass\Validator;
 
-class PropertiesCreate extends JsonAbstract implements JsonInterface
+class DoctorCreate extends JsonAbstract implements JsonInterface
 {
     protected $validator;
 
@@ -26,13 +26,16 @@ class PropertiesCreate extends JsonAbstract implements JsonInterface
     public function validRequiredFields( $array ) {
         $this->trataDados();
         $array  = $this->toArray();
-        $fields = [ 'title', 'total' ];
+        $fields = [ 'name', 'crm', 'phone', 'specialtys' ];
+
+        $this->validator->setRule('specialtys','required|array');
+        $this->validator->setMessage('specialtys.array','Especialidade precisa ser um array');
 
         if ( !$this->validator->valid( $array, $fields ) ) {
             $this->error( $this->validator->error() );
         }
 
-        $this->create( 'total', only_number( $this->get('total') ) );
+        $this->create('phone', only_number( $this->get('phone') ) );
 
         return TRUE;
     }
