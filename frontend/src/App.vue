@@ -1,23 +1,24 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
-  </div>
+    <div class="main-panel">
+        <c-header></c-header>
+        <div class="content">
+            <div class="row">
+                <router-view/>
+            </div>
+        </div>
+
+    </div>
+    <!-- end main-painel -->     
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+    import CHeader from './components/Header'
+    export default {
+        name: 'App',
+        components: { CHeader }
+    }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
