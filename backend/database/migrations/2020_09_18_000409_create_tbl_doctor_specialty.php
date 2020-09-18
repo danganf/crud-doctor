@@ -22,7 +22,7 @@ class CreateTblDoctorSpecialty extends Migration
 
             $table->unique(['doctor_id','specialty_id']);
 
-            $table->foreign('doctor_id')->references('id')->on('doctor');            
+            $table->foreign('doctor_id')->references('id')->on('doctor')->onDelete('cascade');            
             $table->foreign('specialty_id')->references('id')->on('specialty');            
         });
     }

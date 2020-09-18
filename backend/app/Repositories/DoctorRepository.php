@@ -13,11 +13,16 @@ class DoctorRepository extends RepositoryAbstract
         parent::__construct( __CLASS__ );
     }
     
-    public function list(){
-        return $this->getModel()
+    public function list($search=null){
+        $querie = $this->getModel()
                     ->selectRaw('id, name, crm, phone, created_at')
-                    ->orderByRaw('id desc')
-                    ->get()->toArray();
+                    ->orderByRaw('id desc');
+
+        if( $search ){
+            $querie->whereRaw("name like '%$search%' or crm like '%$search%'");
+        }
+
+        return $querie->get()->toArray();
     }
 
     public function createOrUpdate(JsonAbstract $json, $id=null)

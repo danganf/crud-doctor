@@ -7,5 +7,5 @@
  *   tags={"Specialty"},
  *   @SWG\Response(response=201, description="successful operation. User created and rescued")
  * )
- *
+ * 
  */

@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
-    public function list($id=null, DoctorRepository $doctorRepository ){
+    public function list($id=null, Request $request, DoctorRepository $doctorRepository ){
 
         return msgJson( 
             empty($id) 
-            ? $doctorRepository->list() 
+            ? $doctorRepository->list($request->get('q')) 
             : $doctorRepository->setFields('id, name, crm, phone, created_at')->setWhere("id=".(int)$id)->first() 
         );
     }
