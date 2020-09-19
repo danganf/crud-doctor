@@ -28,7 +28,7 @@
                                     <td>{{reg.phone}}</td>
                                     <td>
                                         <router-link :to="{ name: 'edit-doctor', force: true, params: {id:  reg.id} }" tag="button" type="button" class="btn btn-info">Editar</router-link>
-                                        <button type="button" @click="del(reg.id)" class="btn btn-danger">Excluir</button>
+                                        <button type="button" @click="del($event, reg.id, reg.name)" class="btn btn-danger">Excluir</button>
                                     </td>
                                 </tr>
                             </tbody>    
@@ -62,8 +62,31 @@ export default {
                 this.preloader = false
             })
         },
-        del(id){
-            console.log('DEL', id);
+        del(e, id, name){
+            
+             var myhtml = document.createElement("p");
+             myhtml.innerHTML = 'Você está prestes a deletar o registro:<br/><strong>'+name+'</strong><br/><br/>ESSA AÇÃO NÃO PODERÁ SER DESFEITA!!!';
+            
+            this.$swal({
+                title: 'Tem certeza?',
+                content: myhtml,                
+                buttons: {
+                    cancel: true,
+                    confirm: "Sim, quero continuar!",
+                }
+                }).then((result) => {
+                    if(result) {
+                        window.axios.delete(process.env.URL_API_BACKEND + 'doctor/'+id)
+                        .then((result) => {
+                            this.$swal('Sucesso', 'O registros deletado!', 'success')
+                            e.target.parentNode.parentNode.remove()
+                        }).catch(error => {
+                            this.$swal('Ops!', 'Ocorreu um problema', 'success')
+                        })                        
+                    }
+                })
+
+
         }
     },
 
