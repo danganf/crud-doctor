@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right">
-                        <router-link :to="{ name: 'new-doctor', force: true }" tag="button" type="button" @click="newReg" class="btn btn-md btn-success">Novo</router-link>
+                        <router-link :to="{ name: 'new-doctor', force: true }" tag="button" type="button" class="btn btn-md btn-success">Novo</router-link>
                     </div>
                     <div class="table-responsive-sm">
                         <table class="table table-striped table-hover">
@@ -67,9 +67,6 @@ export default {
         },
         del(id){
             console.log('DEL', id);
-        },
-        newReg(){
-
         }
     },
 

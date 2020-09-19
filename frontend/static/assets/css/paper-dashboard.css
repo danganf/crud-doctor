@@ -5467,7 +5467,7 @@ License - nucleoapp.com/license/
 }
 
 .card .card-body {
-  padding: 15px 15px 10px 15px;
+  padding: 15px 25px 10px 15px;
 }
 
 .card .card-body.table-full-width {
@@ -6554,3 +6554,4 @@ License - nucleoapp.com/license/
 
 .form-modal .div{padding-left: 0;}
 .form-modal button{margin-top: 23px;line-height: 30px;}
+ 
