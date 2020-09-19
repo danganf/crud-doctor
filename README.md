@@ -39,7 +39,7 @@ Lembre-se que o usuário necessitará de acessos *root* para criar as tabelas.
 
 > php artisan migrate
 
-> php artisa l5-swagger:generate
+> php artisan l5-swagger:generate
 
 Se ocorreu tudo bem, as tabelas foram criadas no banco definido.
 
