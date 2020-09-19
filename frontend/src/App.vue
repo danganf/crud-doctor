@@ -1,14 +1,12 @@
-<template>
+<template>        
     <div class="main-panel">
         <c-header></c-header>
         <div class="content">
-            <div class="row">
-                <router-view/>
-            </div>
+            <transition name="moveInUp">
+                <router-view :key="$route.fullPath"/>
+            </transition>
         </div>
-
-    </div>
-    <!-- end main-painel -->     
+    </div>      
 </template>
 
 <script>
