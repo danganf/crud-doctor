@@ -12,7 +12,7 @@ class DoctorController extends Controller
         return msgJson( 
             empty($id) 
             ? $doctorRepository->list($request->get('q')) 
-            : $doctorRepository->setFields('id, name, crm, phone, created_at')->setWhere("id=".(int)$id)->first() 
+            : $doctorRepository->setFields('id, name, crm, phone')->setWith('specialtys',['specialty_id','name'])->setWhere("id=".(int)$id)->first() 
         );
     }
     

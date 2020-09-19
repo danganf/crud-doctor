@@ -18,6 +18,14 @@ export default [
         meta: {
             title: 'Novo doutor'
         }
+    },
+    {
+        path: '/doctor/edit/:id',
+        component: DoctorForm,
+        name: 'edit-doctor',
+        meta: {
+            title: 'Alterando doutor'
+        }
     }
 
 ]

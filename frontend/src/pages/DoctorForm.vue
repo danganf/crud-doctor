@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">
-                        
+                        <div v-if="preloader" class="lds-ellipsis spinner"><div></div><div></div><div></div><div></div></div>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -66,10 +66,7 @@
                                 </transition>
                             </div>
                             <div class="col-md-7">
-                                <button type="buttom" @click.stop.prevent="save($event)" :disabled="disabled" class="btn btn-primary btn-round pull-right">
-                                    Salvar
-                                    <div v-if="preloader" class="lds-ellipsis spinner"><div></div><div></div><div></div><div></div></div>
-                                </button>
+                                <button type="buttom" @click.stop.prevent="save($event)" :disabled="disabled" class="btn btn-primary btn-round pull-right">Salvar</button>
                                 <router-link :to="{ name: 'doctor-register', force: true }" tag="button" type="buttom" class="btn btn-info btn-round pull-right"> &laquo; Voltar</router-link>
                             </div>
                         </div>
@@ -105,6 +102,7 @@
             return {
                 preloader: false,
                 specialtys: null,
+                id: null,
                 doctor: new doctorModel(),
                 msgError: null,
                 disabled: true,
@@ -113,7 +111,13 @@
 
         updated() {
             this.$v.$touch()
-            this.disabled = this.$v.$invalid;
+            this.disabled = this.$v.$invalid
+        },
+
+        watch: {
+            specialtys: (val) => {
+                
+            }
         },
 
         methods: {
@@ -131,8 +135,14 @@
                     try{
                         this.disabled = true
                         const text = e.target.innerHTML
-                        e.target.innerHTML = 'Processando...'                        
-                        const result = (await window.axios.post(process.env.URL_API_BACKEND +'doctor', this.doctor.toObjData() ) );
+                        e.target.innerHTML = 'Processando...'
+                        let result = null
+                        if( !this.id ){
+                            result = (await window.axios.post(process.env.URL_API_BACKEND +'doctor', this.doctor.toObjData() ) )
+                        } else {
+                            result = (await window.axios.put(process.env.URL_API_BACKEND +'doctor/'+this.id, this.doctor.toObjData() ) )
+                        }
+
                         if( result.status === 200 ) {
                             this.mix_msgNotify( result.data.messages )
                             this.preloader = false
@@ -150,10 +160,22 @@
                 }
 
             },
+            async getDoctor(id) {                
+                this.preloader = true
+                await window.axios.get(process.env.URL_API_BACKEND + 'doctor/' + id)
+                .then((result) => {
+                    result.data.specialtys = result.data.specialtys.map( row => row.specialty_id )
+                    this.doctor.setdata( result.data )
+                    this.preloader = false
+                    this.id = +id
+                }).catch(error => {
+
+                })
+            },
             async getSpecialty() {
                 await window.axios.get(process.env.URL_API_BACKEND + 'specialty')
                 .then((result) => {
-                    this.specialtys = result.data
+                    this.specialtys = result.data                    
                 }).catch(error => {
 
                 })
@@ -161,14 +183,14 @@
         },
 
         mounted(){
-            this.getSpecialty();
-            this.$refs.name.focus();
-            this.doctor.setdata({
-                name: "Daniel Azevedo Guimarães",
-                crm: "rrr-233",
-                phone: "21981692318",
-                specialtys: [1,4,6,12]               
-            });
+            
+            this.$refs.name.focus()
+
+            this.getSpecialty()
+        
+            if( typeof this.$route.params.id !== 'undefined'){
+                this.getDoctor(this.$route.params.id)                
+            }
         }
     }
 </script>

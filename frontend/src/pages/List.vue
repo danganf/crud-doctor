@@ -27,7 +27,7 @@
                                     <td>{{reg.crm}}</td>
                                     <td>{{reg.phone}}</td>
                                     <td>
-                                        <button type="button" @click="edit(reg.id)" class="btn btn-info">Editar</button>
+                                        <router-link :to="{ name: 'edit-doctor', force: true, params: {id:  reg.id} }" tag="button" type="button" class="btn btn-info">Editar</router-link>
                                         <button type="button" @click="del(reg.id)" class="btn btn-danger">Excluir</button>
                                     </td>
                                 </tr>
@@ -61,9 +61,6 @@ export default {
             }).catch(error => {
                 this.preloader = false
             })
-        },
-        edit(id){
-            console.log('EDIT', id);
         },
         del(id){
             console.log('DEL', id);
