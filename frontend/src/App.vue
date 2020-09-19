@@ -11,8 +11,10 @@
 
 <script>
     import CHeader from './components/Header'
+    import store from '@/store';
     export default {
         name: 'App',
+        store,
         components: { CHeader }
     }
 </script>

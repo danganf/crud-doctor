@@ -46,7 +46,7 @@
                                 <div class="form-group">
                                     <label for="specialty">
                                         Especialidade* ( <small>Click com o <strong>CTR</strong> para selecionar + de 1</small> )
-                                        <div v-if="!specialtys" class="lds-ellipsis spinnerSpecialty"><div></div><div></div><div></div><div></div></div>
+                                        <div v-if="ttSpecialtys === 0" class="lds-ellipsis spinnerSpecialty"><div></div><div></div><div></div><div></div></div>
                                     </label>
                                     <select multiple id="specialty" name="specialtys" class="form-control" 
                                     v-model.trim="$v.doctor.specialtys.$model"
@@ -79,6 +79,7 @@
 
 <script>
     
+    import { mapState, mapActions, mapGetters } from 'vuex';
     import {mask} from 'vue-the-mask'
     import {validationMixin} from 'vuelidate' 
     import {doctorModel} from '@/models/doctor'
@@ -101,7 +102,6 @@
         data(){
             return {
                 preloader: false,
-                specialtys: null,
                 id: null,
                 doctor: new doctorModel(),
                 msgError: null,
@@ -114,13 +114,8 @@
             this.disabled = this.$v.$invalid
         },
 
-        watch: {
-            specialtys: (val) => {
-                
-            }
-        },
-
         methods: {
+            ...mapActions( 'Specialty', [ 'setSpecialty' ] ),
             async save(e){
                 if( !this.preloader ) {
                     this.$v.$touch();
@@ -171,14 +166,6 @@
                 }).catch(error => {
 
                 })
-            },
-            async getSpecialty() {
-                await window.axios.get(process.env.URL_API_BACKEND + 'specialty')
-                .then((result) => {
-                    this.specialtys = result.data                    
-                }).catch(error => {
-
-                })
             }
         },
 
@@ -186,11 +173,16 @@
             
             this.$refs.name.focus()
 
-            this.getSpecialty()
+            this.setSpecialty()
         
             if( typeof this.$route.params.id !== 'undefined'){
                 this.getDoctor(this.$route.params.id)                
             }
+        },
+
+        computed: {
+            ...mapState( 'Specialty', [ 'specialtys' ] ),
+            ...mapGetters( 'Specialty', [ 'ttSpecialtys' ] ),
         }
     }
 </script>
