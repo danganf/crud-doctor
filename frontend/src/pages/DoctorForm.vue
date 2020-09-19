@@ -193,6 +193,7 @@
     select option{padding: 5px;cursor: pointer;}
     form .row{margin-bottom: 14px;}
     .spinnerSpecialty{top: -28px;}
+    .spinner{top: -17px;right: 24px;}
     .save{background-color: #F4F3EF;margin: 0 0 0 6px;}
     button{margin-left: 10px;}
     .error{color: red;font-style: italic;display: none;border: none !important;margin-top: 3px;position: absolute;}

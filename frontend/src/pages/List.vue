@@ -1,11 +1,20 @@
 <template>
     <div class="row">
         <div class="col-md-12">
+            <div class="card search">
+                <div class="card-header">
+                    Digite e pressione ENTER para buscar
+                    <div v-if="preloader" class="lds-ellipsis spinner"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div class="card-body">
+                    <input type="text" ref="search" v-model="term" @keyup.enter="search" class="form-control" id="search" name="search" placeholder="Busca por nome ou crm">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">
-                        <div v-if="preloader" class="lds-ellipsis spinner"><div></div><div></div><div></div><div></div></div>
-                    </h4>
+                    <h4 class="card-title"></h4>
                 </div>
                 <div class="card-body">
                     <div class="pull-right">
@@ -47,20 +56,28 @@ export default {
     data(){
         return {
             registers: [],
-            preloader: false
+            preloader: false,
+            term: '',
+            termAnt: '',
         }
     },
 
     methods: {
         async getDoctor () {
             this.preloader = true
-            await window.axios.get(process.env.URL_API_BACKEND + 'doctor')
+            await window.axios.get(process.env.URL_API_BACKEND + 'doctor?q='+this.term)
             .then((result) => {
                 this.preloader = false
                 this.registers = result.data
             }).catch(error => {
                 this.preloader = false
             })
+        },
+        search(){
+            if( this.term !== this.termAnt ){
+                this.getDoctor()
+                this.termAnt = this.term
+            }
         },
         del(e, id, name){
             
@@ -92,6 +109,7 @@ export default {
 
     mounted(){
         this.getDoctor()
+        this.$refs.search.focus()
     }
 }
 </script>
@@ -100,4 +118,15 @@ export default {
     th{text-transform: uppercase;}
     th:last-child, td:last-child{text-align: right;}
     .spinner{top: -13px;}
+    div.search .card-body {padding-top: 5px;}
+    div.search #search {padding: 15px;font-size: 1.5em;font-weight: 700;}
+    ::placeholder {
+        opacity: 0.3; /* Firefox */
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        opacity: 0.3;
+    }
+    ::-ms-input-placeholder { /* Microsoft Edge */
+        opacity: 0.3;
+    }
 </style>
