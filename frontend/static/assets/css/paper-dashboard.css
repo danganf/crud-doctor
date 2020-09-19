@@ -6554,4 +6554,13 @@ License - nucleoapp.com/license/
 
 .form-modal .div{padding-left: 0;}
 .form-modal button{margin-top: 23px;line-height: 30px;}
+
+.form__input-shake {animation: shake 0.3s;animation-iteration-count: 3;border:1px solid red !important;}
+@keyframes shake {
+  0% { transform: translateX(0px)  }
+  25% { transform: translateX(2px) }
+  50% { transform: translateX(0px)  }
+  75% { transform: translateX(-2px) }
+  100% { transform: translateX(0px)  }
+}
  

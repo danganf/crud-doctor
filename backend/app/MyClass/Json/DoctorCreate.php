@@ -41,6 +41,9 @@ class DoctorCreate extends JsonAbstract implements JsonInterface
     }
 
     private function trataDados() {
-
+        $this->get('phone');
+        if( $this->get('phone') ){
+            $this->create('phone', only_number( $this->get('phone') ) );
+        }
     }
 }
